@@ -28285,12 +28285,230 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"node_modules/react-dom/cjs/react-dom.development.js"}],"src/index.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"node_modules/react-dom/cjs/react-dom.development.js"}],"src/containers/Chat.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var Chat = /*#__PURE__*/function (_Component) {
+  _inherits(Chat, _Component);
+
+  var _super = _createSuper(Chat);
+
+  function Chat() {
+    _classCallCheck(this, Chat);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Chat, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/_react.default.createElement("div", {
+        id: "frame"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        id: "sidepanel"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        id: "profile"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        class: "wrap"
+      }, /*#__PURE__*/_react.default.createElement("img", {
+        id: "profile-img",
+        src: "http://emilcarlsson.se/assets/mikeross.png",
+        class: "online",
+        alt: ""
+      }), /*#__PURE__*/_react.default.createElement("p", null, "Mike Ross"), /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-chevron-down expand-button",
+        "aria-hidden": "true"
+      }), /*#__PURE__*/_react.default.createElement("div", {
+        id: "status-options"
+      }, /*#__PURE__*/_react.default.createElement("ul", null, /*#__PURE__*/_react.default.createElement("li", {
+        id: "status-online",
+        class: "active"
+      }, /*#__PURE__*/_react.default.createElement("span", {
+        class: "status-circle"
+      }), " ", /*#__PURE__*/_react.default.createElement("p", null, "Online")), /*#__PURE__*/_react.default.createElement("li", {
+        id: "status-away"
+      }, /*#__PURE__*/_react.default.createElement("span", {
+        class: "status-circle"
+      }), " ", /*#__PURE__*/_react.default.createElement("p", null, "Away")), /*#__PURE__*/_react.default.createElement("li", {
+        id: "status-busy"
+      }, /*#__PURE__*/_react.default.createElement("span", {
+        class: "status-circle"
+      }), " ", /*#__PURE__*/_react.default.createElement("p", null, "Busy")), /*#__PURE__*/_react.default.createElement("li", {
+        id: "status-offline"
+      }, /*#__PURE__*/_react.default.createElement("span", {
+        class: "status-circle"
+      }), " ", /*#__PURE__*/_react.default.createElement("p", null, "Offline")))), /*#__PURE__*/_react.default.createElement("div", {
+        id: "expanded"
+      }, /*#__PURE__*/_react.default.createElement("label", {
+        for: "twitter"
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-facebook fa-fw",
+        "aria-hidden": "true"
+      })), /*#__PURE__*/_react.default.createElement("input", {
+        name: "twitter",
+        type: "text",
+        value: "mikeross"
+      }), /*#__PURE__*/_react.default.createElement("label", {
+        for: "twitter"
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-twitter fa-fw",
+        "aria-hidden": "true"
+      })), /*#__PURE__*/_react.default.createElement("input", {
+        name: "twitter",
+        type: "text",
+        value: "ross81"
+      }), /*#__PURE__*/_react.default.createElement("label", {
+        for: "twitter"
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-instagram fa-fw",
+        "aria-hidden": "true"
+      })), /*#__PURE__*/_react.default.createElement("input", {
+        name: "twitter",
+        type: "text",
+        value: "mike.ross"
+      })))), /*#__PURE__*/_react.default.createElement("div", {
+        id: "search"
+      }, /*#__PURE__*/_react.default.createElement("label", {
+        for: ""
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-search",
+        "aria-hidden": "true"
+      })), /*#__PURE__*/_react.default.createElement("input", {
+        type: "text",
+        placeholder: "Search contacts..."
+      })), /*#__PURE__*/_react.default.createElement("div", {
+        id: "contacts"
+      }, /*#__PURE__*/_react.default.createElement("ul", null, /*#__PURE__*/_react.default.createElement("li", {
+        class: "contact"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        class: "wrap"
+      }, /*#__PURE__*/_react.default.createElement("span", {
+        class: "contact-status online"
+      }), /*#__PURE__*/_react.default.createElement("img", {
+        src: "http://emilcarlsson.se/assets/louislitt.png",
+        alt: ""
+      }), /*#__PURE__*/_react.default.createElement("div", {
+        class: "meta"
+      }, /*#__PURE__*/_react.default.createElement("p", {
+        class: "name"
+      }, "Louis Litt"), /*#__PURE__*/_react.default.createElement("p", {
+        class: "preview"
+      }, "You just got LITT up, Mike.")))), /*#__PURE__*/_react.default.createElement("li", {
+        class: "contact active"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        class: "wrap"
+      }, /*#__PURE__*/_react.default.createElement("span", {
+        class: "contact-status busy"
+      }), /*#__PURE__*/_react.default.createElement("img", {
+        src: "http://emilcarlsson.se/assets/harveyspecter.png",
+        alt: ""
+      }), /*#__PURE__*/_react.default.createElement("div", {
+        class: "meta"
+      }, /*#__PURE__*/_react.default.createElement("p", {
+        class: "name"
+      }, "Harvey Specter"), /*#__PURE__*/_react.default.createElement("p", {
+        class: "preview"
+      }, "Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.")))))), /*#__PURE__*/_react.default.createElement("div", {
+        id: "bottom-bar"
+      }, /*#__PURE__*/_react.default.createElement("button", {
+        id: "addcontact"
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-user-plus fa-fw",
+        "aria-hidden": "true"
+      }), " ", /*#__PURE__*/_react.default.createElement("span", null, "Add contact")), /*#__PURE__*/_react.default.createElement("button", {
+        id: "settings"
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-cog fa-fw",
+        "aria-hidden": "true"
+      }), " ", /*#__PURE__*/_react.default.createElement("span", null, "Settings")))), /*#__PURE__*/_react.default.createElement("div", {
+        class: "content"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        class: "contact-profile"
+      }, /*#__PURE__*/_react.default.createElement("img", {
+        src: "http://emilcarlsson.se/assets/harveyspecter.png",
+        alt: ""
+      }), /*#__PURE__*/_react.default.createElement("p", null, "username"), /*#__PURE__*/_react.default.createElement("div", {
+        class: "social-media"
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-facebook",
+        "aria-hidden": "true"
+      }), /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-twitter",
+        "aria-hidden": "true"
+      }), /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-instagram",
+        "aria-hidden": "true"
+      }))), /*#__PURE__*/_react.default.createElement("div", {
+        class: "messages"
+      }, /*#__PURE__*/_react.default.createElement("ul", {
+        id: "chat-log"
+      })), /*#__PURE__*/_react.default.createElement("div", {
+        class: "message-input"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        class: "wrap"
+      }, /*#__PURE__*/_react.default.createElement("input", {
+        id: "chat-message-input",
+        type: "text",
+        placeholder: "Write your message..."
+      }), /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-paperclip attachment",
+        "aria-hidden": "true"
+      }), /*#__PURE__*/_react.default.createElement("button", {
+        id: "chat-message-submit",
+        class: "submit"
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        class: "fa fa-paper-plane",
+        "aria-hidden": "true"
+      }))))));
+    }
+  }]);
+
+  return Chat;
+}(_react.Component);
+
+var _default = Chat;
+exports.default = _default;
+},{"react":"node_modules/react/index.js"}],"src/index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
 
 var _reactDom = _interopRequireDefault(require("react-dom"));
+
+var _Chat = _interopRequireDefault(require("./containers/Chat"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28330,7 +28548,7 @@ var App = /*#__PURE__*/function (_React$Component) {
   _createClass(App, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/_react.default.createElement("div", null, "hello");
+      return /*#__PURE__*/_react.default.createElement(_Chat.default, null);
     }
   }]);
 
@@ -28338,7 +28556,7 @@ var App = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 _reactDom.default.render( /*#__PURE__*/_react.default.createElement(App, null), document.getElementById('app'));
-},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js"}],"../../../../.nvm/versions/node/v12.16.1/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./containers/Chat":"src/containers/Chat.js"}],"../../../../.nvm/versions/node/v12.16.1/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -28366,7 +28584,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35165" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43507" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
