@@ -1,8 +1,37 @@
 import React, { Component } from 'react';
 import Sidepanel from './Sidepanel/Sidepanel'
+import WebSocketInstance from '../websocket'
 
 
 class Chat extends Component {
+
+    constructor(props) {
+        super(props)
+    
+        this.state = {}
+
+        this.waitForSocketConnection()
+
+    }
+    waitForSocketConnection(callback){
+        const component = this;
+        
+
+        setTimeout(
+            function(){
+                if(WebSocketInstance.state() === 1){
+                    console.log('connection is secure');
+                    callback();
+
+                }
+                else{
+                    console.log('waiting for connection');
+                    component.waitForSocketConnection(callback);
+                    
+                }
+            }, 200);
+    }
+    
     render() {
         return (
             <div id="frame">

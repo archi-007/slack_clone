@@ -79,7 +79,7 @@ class WebSocketService {
             console.log(err.message);
         }
     }
-
+   
     state() {
         return this.socketRef.readyState;
     }
