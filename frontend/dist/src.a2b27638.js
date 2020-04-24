@@ -28437,14 +28437,19 @@ var WebSocketService = /*#__PURE__*/function () {
     value: function connect() {
       var _this = this;
 
-      var path = 'ws://127.0.0.1:8000/ws/chat/test';
+      var path = 'ws://127.0.0.1:8000/ws/chat/test/';
       this.socketRef = new WebSocket(path);
 
       this.socketRef.onopen = function () {
-        console.log('websocket open');
+        console.log('WebSocket open');
       };
 
-      this.socketRef.onmessage = function (e) {// to send message
+      this.socketNewMessage(JSON.stringify({
+        command: 'fetch_messages'
+      }));
+
+      this.socketRef.onmessage = function (e) {
+        _this.socketNewMessage(e.data);
       };
 
       this.socketRef.onerror = function (e) {
@@ -28452,7 +28457,7 @@ var WebSocketService = /*#__PURE__*/function () {
       };
 
       this.socketRef.onclose = function () {
-        console.log('websocket is closed');
+        console.log("WebSocket closed let's reopen");
 
         _this.connect();
       };
@@ -28530,17 +28535,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireWildcard(require("react"));
+var _react = _interopRequireDefault(require("react"));
 
 var _Sidepanel = _interopRequireDefault(require("./Sidepanel/Sidepanel"));
 
 var _websocket = _interopRequireDefault(require("../websocket"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -28578,8 +28579,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var Chat = /*#__PURE__*/function (_Component) {
-  _inherits(Chat, _Component);
+var Chat = /*#__PURE__*/function (_React$Component) {
+  _inherits(Chat, _React$Component);
 
   var _super = _createSuper(Chat);
 
@@ -28590,15 +28591,37 @@ var Chat = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this, props);
 
+    _defineProperty(_assertThisInitialized(_this), "messageChangeHandler", function (event) {
+      _this.setState({
+        message: event.target.value
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "sendMessageHandler", function (e) {
+      e.preventDefault();
+      var messageObject = {
+        from: "admin",
+        content: _this.state.message
+      };
+
+      _websocket.default.newChatMessage(messageObject);
+
+      _this.setState({
+        message: ''
+      });
+    });
+
     _defineProperty(_assertThisInitialized(_this), "renderMessages", function (messages) {
-      var currentUser = 'admin';
-      return messages.map(function (message) {
+      var currentUser = "admin";
+      return messages.map(function (message, i) {
         return /*#__PURE__*/_react.default.createElement("li", {
           key: message.id,
           className: message.author === currentUser ? 'sent' : 'replies'
         }, /*#__PURE__*/_react.default.createElement("img", {
           src: "http://emilcarlsson.se/assets/mikeross.png"
-        }), /*#__PURE__*/_react.default.createElement("p", null, message.content));
+        }), /*#__PURE__*/_react.default.createElement("p", null, message.content, /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("small", {
+          className: message.author === currentUser ? 'sent' : 'replies'
+        }, Math.round((new Date().getTime() - new Date(message.timestamp).getTime()) / 60000), " minutes ago")));
       });
     });
 
@@ -28619,26 +28642,27 @@ var Chat = /*#__PURE__*/function (_Component) {
       var component = this;
       setTimeout(function () {
         if (_websocket.default.state() === 1) {
-          console.log('connection is secure');
+          console.log("Connection is made");
           callback();
+          return;
         } else {
-          console.log('waiting for connection');
+          console.log("wait for connection...");
           component.waitForSocketConnection(callback);
         }
-      }, 200);
-    }
-  }, {
-    key: "setMessages",
-    value: function setMessages(messages) {
-      this.setState({
-        messages: messages.reverse()
-      });
+      }, 100);
     }
   }, {
     key: "addMessage",
     value: function addMessage(message) {
       this.setState({
         messages: [].concat(_toConsumableArray(this.state.messages), [message])
+      });
+    }
+  }, {
+    key: "setMessages",
+    value: function setMessages(messages) {
+      this.setState({
+        messages: messages.reverse()
       });
     }
   }, {
@@ -28671,9 +28695,14 @@ var Chat = /*#__PURE__*/function (_Component) {
         id: "chat-log"
       }, messages && this.renderMessages(messages))), /*#__PURE__*/_react.default.createElement("div", {
         className: "message-input"
+      }, /*#__PURE__*/_react.default.createElement("form", {
+        onSubmit: this.sendMessageHandler
       }, /*#__PURE__*/_react.default.createElement("div", {
         className: "wrap"
       }, /*#__PURE__*/_react.default.createElement("input", {
+        onChange: this.messageChangeHandler,
+        value: this.state.message,
+        required: true,
         id: "chat-message-input",
         type: "text",
         placeholder: "Write your message..."
@@ -28686,12 +28715,12 @@ var Chat = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/_react.default.createElement("i", {
         className: "fa fa-paper-plane",
         "aria-hidden": "true"
-      }))))));
+      })))))));
     }
   }]);
 
   return Chat;
-}(_react.Component);
+}(_react.default.Component);
 
 var _default = Chat;
 exports.default = _default;
@@ -28703,6 +28732,8 @@ var _react = _interopRequireDefault(require("react"));
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
 var _Chat = _interopRequireDefault(require("./containers/Chat"));
+
+var _websocket = _interopRequireDefault(require("./websocket"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28740,6 +28771,11 @@ var App = /*#__PURE__*/function (_React$Component) {
   }
 
   _createClass(App, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      _websocket.default.connect();
+    }
+  }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/_react.default.createElement(_Chat.default, null);
@@ -28749,8 +28785,8 @@ var App = /*#__PURE__*/function (_React$Component) {
   return App;
 }(_react.default.Component);
 
-_reactDom.default.render( /*#__PURE__*/_react.default.createElement(App, null), document.getElementById('app'));
-},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./containers/Chat":"src/containers/Chat.js"}],"../../../../.nvm/versions/node/v12.16.1/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+_reactDom.default.render( /*#__PURE__*/_react.default.createElement(App, null), document.getElementById("app"));
+},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./containers/Chat":"src/containers/Chat.js","./websocket":"src/websocket.js"}],"../../../../.nvm/versions/node/v12.16.1/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -28778,7 +28814,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35427" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43099" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
