@@ -28544,6 +28544,18 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -28564,6 +28576,8 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var Chat = /*#__PURE__*/function (_Component) {
   _inherits(Chat, _Component);
 
@@ -28575,9 +28589,26 @@ var Chat = /*#__PURE__*/function (_Component) {
     _classCallCheck(this, Chat);
 
     _this = _super.call(this, props);
+
+    _defineProperty(_assertThisInitialized(_this), "renderMessages", function (messages) {
+      var currentUser = 'admin';
+      return messages.map(function (message) {
+        return /*#__PURE__*/_react.default.createElement("li", {
+          key: message.id,
+          className: message.author === currentUser ? 'sent' : 'replies'
+        }, /*#__PURE__*/_react.default.createElement("img", {
+          src: "http://emilcarlsson.se/assets/mikeross.png"
+        }), /*#__PURE__*/_react.default.createElement("p", null, message.content));
+      });
+    });
+
     _this.state = {};
 
-    _this.waitForSocketConnection();
+    _this.waitForSocketConnection(function () {
+      _websocket.default.addCallbacks(_this.setMessages.bind(_assertThisInitialized(_this)), _this.addMessage.bind(_assertThisInitialized(_this)));
+
+      _websocket.default.fetchMessages(_this.props.currentUser);
+    });
 
     return _this;
   }
@@ -28597,8 +28628,23 @@ var Chat = /*#__PURE__*/function (_Component) {
       }, 200);
     }
   }, {
+    key: "setMessages",
+    value: function setMessages(messages) {
+      this.setState({
+        messages: messages.reverse()
+      });
+    }
+  }, {
+    key: "addMessage",
+    value: function addMessage(message) {
+      this.setState({
+        messages: [].concat(_toConsumableArray(this.state.messages), [message])
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
+      var messages = this.state.messages;
       return /*#__PURE__*/_react.default.createElement("div", {
         id: "frame"
       }, /*#__PURE__*/_react.default.createElement(_Sidepanel.default, null), /*#__PURE__*/_react.default.createElement("div", {
@@ -28623,7 +28669,7 @@ var Chat = /*#__PURE__*/function (_Component) {
         className: "messages"
       }, /*#__PURE__*/_react.default.createElement("ul", {
         id: "chat-log"
-      })), /*#__PURE__*/_react.default.createElement("div", {
+      }, messages && this.renderMessages(messages))), /*#__PURE__*/_react.default.createElement("div", {
         className: "message-input"
       }, /*#__PURE__*/_react.default.createElement("div", {
         className: "wrap"
@@ -28732,7 +28778,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33557" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35427" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

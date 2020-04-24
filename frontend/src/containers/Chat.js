@@ -7,32 +7,68 @@ class Chat extends Component {
 
     constructor(props) {
         super(props)
-    
+
         this.state = {}
 
-        this.waitForSocketConnection()
+        this.waitForSocketConnection(() => {
+            WebSocketInstance.addCallbacks(
+                this.setMessages.bind(this),
+                this.addMessage.bind(this));
+            WebSocketInstance.fetchMessages(this.props.currentUser);
+        });
 
     }
-    waitForSocketConnection(callback){
+    waitForSocketConnection(callback) {
         const component = this;
-        
+
 
         setTimeout(
-            function(){
-                if(WebSocketInstance.state() === 1){
+            function () {
+                if (WebSocketInstance.state() === 1) {
                     console.log('connection is secure');
                     callback();
 
                 }
-                else{
+                else {
                     console.log('waiting for connection');
                     component.waitForSocketConnection(callback);
-                    
+
                 }
             }, 200);
     }
-    
+
+    setMessages(messages) {
+        this.setState({
+            messages: messages.reverse()
+        });
+    }
+
+    addMessage(message) {
+        this.setState({
+            messages: [...this.state.messages, message]
+        });
+    }
+
+    renderMessages = (messages) => {
+        const currentUser = 'admin';
+        return messages.map(message => (
+
+            <li
+                key={message.id}
+                className={message.author === currentUser ? 'sent' : 'replies'}>
+                <img src="http://emilcarlsson.se/assets/mikeross.png" />
+
+                <p>
+                    {message.content}
+                </p>
+            </li>
+
+        ));
+    }
+
     render() {
+        const messages = this.state.messages;
+        
         return (
             <div id="frame">
                 <Sidepanel />
@@ -48,7 +84,9 @@ class Chat extends Component {
                     </div>
                     <div className="messages">
                         <ul id="chat-log">
-
+                            {
+                                messages && this.renderMessages(messages)
+                            }
                         </ul>
                     </div>
                     <div className="message-input">
